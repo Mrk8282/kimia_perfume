@@ -1,0 +1,466 @@
+:root {
+  --bg-granite: #0c0d10;
+  --card-bg: rgba(18, 19, 24, 0.85);
+  --gold-primary: #e0a96d;
+  --gold-soft: #f4d0a9;
+  --text-pure: #f8f8f9;
+  --text-muted: #9c9ca3;
+  --border-subtle: rgba(255, 255, 255, 0.09);
+  --border-gold-subtle: rgba(224, 169, 109, 0.25);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  background-color: var(--bg-granite);
+  /* افکت سنگ گرانیت سیاه طبیعی با رگه‌های مورب و ظریف سفید */
+  background-image: 
+    linear-gradient(125deg, transparent 48%, rgba(255, 255, 255, 0.055) 49%, rgba(255, 255, 255, 0.12) 50%, transparent 52%),
+    linear-gradient(65deg, transparent 58%, rgba(255, 255, 255, 0.035) 59%, rgba(255, 255, 255, 0.09) 60%, transparent 61.5%),
+    linear-gradient(155deg, transparent 72%, rgba(255, 255, 255, 0.04) 73%, rgba(255, 255, 255, 0.08) 73.8%, transparent 75%),
+    radial-gradient(ellipse at 50% 20%, rgba(35, 38, 48, 0.6) 0%, rgba(10, 11, 14, 0.95) 75%);
+  background-attachment: fixed;
+  background-size: 100% 100%, 700px 700px, 900px 900px, 100% 100%;
+  color: var(--text-pure);
+  line-height: 1.8;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* لایه پوششی شبیه‌ساز کریستال‌های گرانیت */
+.granite-veins {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background: radial-gradient(circle at 80% 30%, rgba(255,255,255,0.02) 0%, transparent 40%),
+              radial-gradient(circle at 20% 70%, rgba(255,255,255,0.025) 0%, transparent 50%);
+  z-index: 1;
+}
+
+#spray-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99;
+}
+
+.gold-text {
+  color: var(--gold-primary);
+}
+
+/* شیشه عطر نارسیسو رودریگز گوشه سمت چپ */
+.perfume-stage {
+  position: fixed;
+  top: 140px;
+  left: 45px;
+  right: auto;
+  z-index: 90;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.perfume-stage.press {
+  transform: translateY(4px) scale(0.98);
+}
+.bottle-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.perfume-cap {
+  width: 66px;
+  height: 38px;
+  background: #17171a;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  transition: transform 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  z-index: 5;
+}
+.perfume-cap.opened {
+  transform: translateY(-44px) rotate(8deg);
+}
+
+.perfume-atomizer {
+  width: 20px;
+  height: 16px;
+  background: linear-gradient(135deg, #e0a96d, #8f6534);
+  border-radius: 2px;
+  position: relative;
+  margin-top: -6px;
+  z-index: 3;
+}
+.nozzle {
+  width: 4px;
+  height: 4px;
+  background: #111;
+  border-radius: 50%;
+  position: absolute;
+  right: 2px;
+  top: 5px;
+}
+
+.perfume-neck {
+  width: 32px;
+  height: 6px;
+  background: #232328;
+}
+
+.perfume-body {
+  width: 88px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  padding: 8px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+}
+.inner-block {
+  width: 100%;
+  height: 100%;
+  background: #131418;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 5px;
+}
+.bottle-brand {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: var(--text-pure);
+}
+.bottle-sub {
+  font-size: 6px;
+  letter-spacing: 1px;
+  color: var(--gold-primary);
+  margin-top: 4px;
+}
+.interactive-tooltip {
+  position: absolute;
+  bottom: -48px;
+  left: -15px;
+  width: 130px;
+  font-size: 10px;
+  background: #17181f;
+  border: 1px solid var(--border-gold-subtle);
+  padding: 6px 8px;
+  border-radius: 4px;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  text-align: center;
+}
+.perfume-stage:hover .interactive-tooltip {
+  opacity: 1;
+}
+
+/* نوار بالا */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 60px;
+  background: rgba(12, 13, 16, 0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 80;
+}
+.brand-logo {
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+}
+.navbar nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-right: 28px;
+  font-size: 0.95rem;
+  transition: color 0.3s;
+}
+.navbar nav a:hover {
+  color: var(--gold-primary);
+}
+
+/* هیرو سکشن */
+.hero-section {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  padding: 0 80px;
+  max-width: 960px;
+  position: relative;
+  z-index: 10;
+}
+.subtitle {
+  font-size: 1.05rem;
+  margin-bottom: 12px;
+}
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 22px;
+  transition: all 0.5s ease;
+}
+.hero-title.scented-glow {
+  text-shadow: 0 0 25px var(--gold-primary), 0 0 50px rgba(224, 169, 109, 0.5);
+  color: var(--gold-soft);
+  transform: scale(1.015);
+}
+.hero-desc {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 580px;
+  margin-bottom: 35px;
+}
+.hero-actions {
+  display: flex;
+  gap: 16px;
+}
+.btn {
+  padding: 12px 28px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.btn-gold {
+  background: var(--gold-primary);
+  color: #0b0b0d;
+}
+.btn-gold:hover {
+  background: var(--gold-soft);
+  box-shadow: 0 6px 20px rgba(224, 169, 109, 0.3);
+}
+.btn-outline {
+  border: 1px solid var(--border-gold-subtle);
+  color: var(--text-pure);
+}
+.btn-outline:hover {
+  background: rgba(224, 169, 109, 0.08);
+  border-color: var(--gold-primary);
+}
+
+/* درباره ما */
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 70px 25px;
+  position: relative;
+  z-index: 10;
+}
+.about-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 50px 45px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+.gold-tag {
+  display: inline-block;
+  color: var(--gold-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+.section-title {
+  font-size: 2.1rem;
+  margin-bottom: 22px;
+}
+.about-lead {
+  font-size: 1.2rem;
+  color: var(--gold-soft);
+  margin-bottom: 18px;
+}
+.about-body {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  margin-bottom: 35px;
+}
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 25px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 25px;
+}
+.stat-num {
+  font-size: 2.2rem;
+  font-weight: 900;
+  display: block;
+}
+.stat-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* دسته‌بندی و کارت‌ها */
+.category-block {
+  margin-bottom: 20px;
+}
+.category-title-wrap {
+  margin-bottom: 25px;
+  border-right: 3px solid var(--gold-primary);
+  padding-right: 15px;
+}
+.category-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  padding: 2px 10px;
+  border-radius: 20px;
+  margin-bottom: 5px;
+  border: 1px solid var(--border-subtle);
+}
+.category-badge.gold-badge {
+  background: rgba(224, 169, 109, 0.15);
+  color: var(--gold-primary);
+  border-color: var(--border-gold-subtle);
+}
+.category-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-pure);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.section-desc {
+  color: var(--text-muted);
+}
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+}
+.brand-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  padding: 30px 20px;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-pure);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  backdrop-filter: blur(8px);
+}
+.brand-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--gold-primary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.brand-logo-container {
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  width: 100%;
+}
+.brand-svg-text {
+  width: 150px;
+  height: 45px;
+}
+.brand-card h4 {
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+}
+.brand-card p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.order-link {
+  font-size: 0.85rem;
+  color: var(--gold-primary);
+  margin-top: auto;
+}
+
+/* فوتر */
+.footer-section {
+  border-top: 1px solid var(--border-subtle);
+  background: #08090b;
+  padding: 50px 0 20px;
+  position: relative;
+  z-index: 10;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px;
+  padding-bottom: 30px;
+}
+.store-address {
+  color: var(--text-muted);
+  margin-top: 12px;
+}
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+.social-btn {
+  display: inline-block;
+  padding: 10px 18px;
+  background: #14151a;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  color: var(--text-pure);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+.social-btn:hover {
+  background: var(--gold-primary);
+  color: #0b0b0d;
+}
+.copyright {
+  text-align: center;
+  color: #555;
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .perfume-stage {
+    top: auto;
+    bottom: 25px;
+    left: 15px;
+    transform: scale(0.8);
+  }
+  .hero-title {
+    font-size: 2.3rem;
+  }
+  .hero-section {
+    padding: 0 20px;
+  }
+}
