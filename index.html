@@ -11,13 +11,11 @@
 </head>
 <body>
 
-  <!-- بافت رگه‌های سنگ گرانیت -->
+  <!-- بافت رگه‌های گرانیت -->
   <div class="granite-veins"></div>
-
-  <!-- بوم پاشش ذرات عطر -->
   <canvas id="spray-canvas"></canvas>
 
-  <!-- المان تعاملی بطری نارسیسو در گوشه سمت چپ -->
+  <!-- المان تعاملی بطری نارسیسو در گوشه چپ -->
   <div class="perfume-stage" id="perfumeStage" title="برای اسپری عطر کلیک کنید">
     <div class="bottle-wrapper">
       <div class="perfume-cap" id="perfumeCap"></div>
@@ -35,7 +33,7 @@
     <div class="interactive-tooltip">درب را باز کنید یا با کلیک روی شیشه، عطر اسپری کنید</div>
   </div>
 
-  <!-- نوار ناوبری بالا -->
+  <!-- نوار ناوبری -->
   <header class="navbar">
     <div class="brand-logo">
       <span class="gold-text">KAYA</span> PERFUME
@@ -47,7 +45,7 @@
     </nav>
   </header>
 
-  <!-- بخش اصلی و بنر -->
+  <!-- هیرو سکشن همراه با اسلایدر -->
   <section class="hero-section">
     <div class="hero-content">
       <p class="subtitle gold-text">کلکسیون ناب‌ترین روایح شرقی و جهانی</p>
@@ -60,6 +58,44 @@
       <div class="hero-actions">
         <a href="#brands" class="btn btn-gold">مشاهده برندها</a>
         <a href="https://wa.me/989232168112?text=سلام%2C+جهت+مشاوره+خرید+عطر+کایا+پیام+میدهم" target="_blank" class="btn btn-outline">مشاوره در واتساپ</a>
+      </div>
+    </div>
+
+    <!-- اسلایدر لوکس با عکس‌های لوکال -->
+    <div class="hero-slider-wrap" id="sliderWrap">
+      <div class="slider-container">
+        <!-- اسلاید ۱ -->
+        <div class="slide active">
+          <img src="images/slide1.jpg" alt="Narciso & Luxury Perfume" />
+          <div class="slide-caption">Narciso Rodriguez & Luxury Scents</div>
+        </div>
+        <!-- اسلاید ۲ -->
+        <div class="slide">
+          <img src="images/slide2.jpg" alt="Dior & Chanel Elegance" />
+          <div class="slide-caption">Dior & Chanel Masterpieces</div>
+        </div>
+        <!-- اسلاید ۳ -->
+        <div class="slide">
+          <img src="images/slide3.jpg" alt="Tom Ford Private Blend" />
+          <div class="slide-caption">Tom Ford & Smoky Amber Collection</div>
+        </div>
+        <!-- اسلاید ۴ -->
+        <div class="slide">
+          <img src="images/slide4.jpg" alt="Creed & Royal Essence" />
+          <div class="slide-caption">Creed & Royal Fragrances</div>
+        </div>
+      </div>
+
+      <!-- کلیدهای کنترل دستی -->
+      <button class="slider-btn prev-btn" id="prevBtn" aria-label="عکس قبلی">&#10094;</button>
+      <button class="slider-btn next-btn" id="nextBtn" aria-label="عکس بعدی">&#10095;</button>
+
+      <!-- نشانگرها -->
+      <div class="slider-dots" id="sliderDots">
+        <span class="dot active" data-index="0"></span>
+        <span class="dot" data-index="1"></span>
+        <span class="dot" data-index="2"></span>
+        <span class="dot" data-index="3"></span>
       </div>
     </div>
   </section>
@@ -261,7 +297,7 @@
     </div>
   </section>
 
-  <!-- فوتر و ارتباط -->
+  <!-- فوتر -->
   <footer class="footer-section" id="contact">
     <div class="container footer-grid">
       <div class="footer-col">
@@ -289,8 +325,77 @@
     </div>
   </footer>
 
-  <!-- اسکریپت فیزیک و انیمیشن شیشه و اسپری نارسیسو -->
+  <!-- اسکریپت‌ها با تایمر کاملاً مستقل و دقیق ۵ ثانیه‌ای -->
   <script>
+    /* اسلایدر هدر (تایمر ۵ ثانیه کاملاً ایزوله) */
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const sliderWrap = document.getElementById('sliderWrap');
+
+    let currentSlide = 0;
+    let slideTimer = null;
+    const intervalTime = 5000; // ۵ ثانیه دقیق
+
+    function showSlide(index) {
+      slides.forEach((slide) => slide.classList.remove('active'));
+      dots.forEach((dot) => dot.classList.remove('active'));
+
+      currentSlide = (index + slides.length) % slides.length;
+
+      slides[currentSlide].classList.add('active');
+      dots[currentSlide].classList.add('active');
+    }
+
+    function nextSlide() {
+      showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentSlide - 1);
+    }
+
+    function resetTimer() {
+      if (slideTimer) {
+        clearInterval(slideTimer);
+      }
+      slideTimer = setInterval(nextSlide, intervalTime);
+    }
+
+    function stopTimer() {
+      if (slideTimer) {
+        clearInterval(slideTimer);
+        slideTimer = null;
+      }
+    }
+
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      resetTimer();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      resetTimer();
+    });
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', (e) => {
+        const targetIndex = parseInt(e.target.dataset.index);
+        showSlide(targetIndex);
+        resetTimer();
+      });
+    });
+
+    sliderWrap.addEventListener('mouseenter', stopTimer);
+    sliderWrap.addEventListener('mouseleave', resetTimer);
+
+    // شروع تایمر ۵ ثانیه
+    resetTimer();
+
+
+    /* بطری نارسیسو و افشانه عطر */
     const cap = document.getElementById('perfumeCap');
     const bottleStage = document.getElementById('perfumeStage');
     const canvas = document.getElementById('spray-canvas');

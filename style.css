@@ -18,7 +18,6 @@
 body {
   font-family: 'Vazirmatn', sans-serif;
   background-color: var(--bg-granite);
-  /* افکت سنگ گرانیت سیاه طبیعی با رگه‌های مورب و ظریف سفید */
   background-image: 
     linear-gradient(125deg, transparent 48%, rgba(255, 255, 255, 0.055) 49%, rgba(255, 255, 255, 0.12) 50%, transparent 52%),
     linear-gradient(65deg, transparent 58%, rgba(255, 255, 255, 0.035) 59%, rgba(255, 255, 255, 0.09) 60%, transparent 61.5%),
@@ -32,7 +31,6 @@ body {
   position: relative;
 }
 
-/* لایه پوششی شبیه‌ساز کریستال‌های گرانیت */
 .granite-veins {
   position: fixed;
   top: 0;
@@ -59,7 +57,7 @@ body {
   color: var(--gold-primary);
 }
 
-/* شیشه عطر نارسیسو رودریگز گوشه سمت چپ */
+/* بطری عطر نارسیسو در گوشه چپ */
 .perfume-stage {
   position: fixed;
   top: 140px;
@@ -77,7 +75,6 @@ body {
   flex-direction: column;
   align-items: center;
 }
-
 .perfume-cap {
   width: 66px;
   height: 38px;
@@ -91,7 +88,6 @@ body {
 .perfume-cap.opened {
   transform: translateY(-44px) rotate(8deg);
 }
-
 .perfume-atomizer {
   width: 20px;
   height: 16px;
@@ -110,13 +106,11 @@ body {
   right: 2px;
   top: 5px;
 }
-
 .perfume-neck {
   width: 32px;
   height: 6px;
   background: #232328;
 }
-
 .perfume-body {
   width: 88px;
   height: 120px;
@@ -170,7 +164,7 @@ body {
   opacity: 1;
 }
 
-/* نوار بالا */
+/* نوار منو */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -199,22 +193,29 @@ body {
   color: var(--gold-primary);
 }
 
-/* هیرو سکشن */
+/* هیرو سکشن به همراه اسلایدر ۲ ستونه */
 .hero-section {
-  min-height: 80vh;
+  min-height: 85vh;
   display: flex;
   align-items: center;
-  padding: 0 80px;
-  max-width: 960px;
+  justify-content: space-between;
+  padding: 40px 80px;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 50px;
   position: relative;
   z-index: 10;
+}
+.hero-content {
+  flex: 1.1;
+  max-width: 620px;
 }
 .subtitle {
   font-size: 1.05rem;
   margin-bottom: 12px;
 }
 .hero-title {
-  font-size: 3.5rem;
+  font-size: 3.4rem;
   font-weight: 900;
   line-height: 1.3;
   margin-bottom: 22px;
@@ -228,7 +229,6 @@ body {
 .hero-desc {
   font-size: 1.15rem;
   color: var(--text-muted);
-  max-width: 580px;
   margin-bottom: 35px;
 }
 .hero-actions {
@@ -258,6 +258,107 @@ body {
 .btn-outline:hover {
   background: rgba(224, 169, 109, 0.08);
   border-color: var(--gold-primary);
+}
+
+/* اسلایدر هدر */
+.hero-slider-wrap {
+  flex: 0.9;
+  max-width: 480px;
+  position: relative;
+  border-radius: 12px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-gold-subtle);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+}
+.slider-container {
+  position: relative;
+  width: 100%;
+  height: 440px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease;
+  transform: scale(1.04);
+}
+.slide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.85) contrast(1.1);
+}
+.slide-caption {
+  position: absolute;
+  bottom: 0;
+  inset-inline: 0;
+  background: linear-gradient(to top, rgba(12, 13, 16, 0.95), transparent);
+  padding: 30px 20px 18px;
+  font-size: 0.85rem;
+  letter-spacing: 1.5px;
+  text-align: center;
+  color: var(--gold-soft);
+  font-weight: 600;
+}
+
+/* دکمه‌های ناوبری دستی */
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(12, 13, 16, 0.75);
+  border: 1px solid var(--border-subtle);
+  color: var(--gold-primary);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.3s;
+  z-index: 10;
+  backdrop-filter: blur(5px);
+}
+.slider-btn:hover {
+  background: var(--gold-primary);
+  color: #0b0b0d;
+}
+.prev-btn {
+  right: 18px;
+}
+.next-btn {
+  left: 18px;
+}
+
+/* نقاط نشانگر */
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.dot.active {
+  background: var(--gold-primary);
+  width: 22px;
+  border-radius: 6px;
 }
 
 /* درباره ما */
@@ -450,6 +551,29 @@ body {
   padding-top: 20px;
 }
 
+/* رسپانسیو */
+@media (max-width: 992px) {
+  .hero-section {
+    flex-direction: column;
+    padding: 30px 25px;
+    gap: 35px;
+  }
+  .hero-content {
+    max-width: 100%;
+    text-align: center;
+  }
+  .hero-actions {
+    justify-content: center;
+  }
+  .hero-slider-wrap {
+    width: 100%;
+    max-width: 440px;
+  }
+  .slider-container {
+    height: 360px;
+  }
+}
+
 @media (max-width: 768px) {
   .perfume-stage {
     top: auto;
@@ -459,8 +583,5 @@ body {
   }
   .hero-title {
     font-size: 2.3rem;
-  }
-  .hero-section {
-    padding: 0 20px;
   }
 }
